@@ -46,7 +46,7 @@ exports.up = async(knex) =>  {
     table.string('zipcode', 15).notNullable();
     table.float('latitude').notNullable();
     table.float('longitude').notNullable();
-    references(table, 'state');
+    references(table, 'state', false);
     references(table, 'country');
   });
 

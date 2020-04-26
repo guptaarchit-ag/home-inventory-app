@@ -15,13 +15,9 @@ const {
 */
 
 exports.up = async(knex) => {
-    await knex.schema.table(tableNames.address, (table) => {
-        table.dropColumn('country_id');
-    });
     
     await knex.schema.table(tableNames.state, (table) => {
         table.string('code');
-        references(table, tableNames.country);
     });
     
     await knex.schema.table(tableNames.country, (table) => {
@@ -39,21 +35,27 @@ exports.up = async(knex) => {
         references(table, tableNames.shape);
         addDefaultColumns(table);
     });
-  
+    
+    await knex.schema.createTable(tableNames.item, (table)=> {
+        table.increments();
+        references(table, tableNames.user);
+        table.string('name');
+        references(table, tableNames.item_type);
+        table.text('description');
+        references(table, tableNames.manufacturer);
+        references(table, tableNames.size);
+        table.string('sku',42);
+        table.boolean('sparks_joy').defaultTo(true);
+        addDefaultColumns(table);
+    })
 };
 /**
  * @param {Knex} knex
 */
 
 exports.down = async (knex) => {
-    await knex.schema.table(tableNames.address, (table)=> {
-        references(table, tableNames.country);
-    });
-
-    await knex.schema.table(tableNames.state, (table) => {
-        table.dropColumn('country_id');
-    });
 
     await knex.schema.dropTable(tableNames.size);
+    await knex.schema.dropTable(tableNames.item);
   
 };

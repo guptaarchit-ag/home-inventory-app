@@ -8,6 +8,6 @@ module.exports = {
     address: 'address',
     manufacturer: 'manufacturer',
     size: 'size',
-
+    item: 'item',
 
 }
